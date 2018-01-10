@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../lib/spider', __dir__)
+
+initial_url = "https://www.bbc.co.uk"
+
+spider = Spider.new
+spider.crawl(initial_url)
