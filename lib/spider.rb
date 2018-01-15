@@ -2,19 +2,24 @@ require 'mechanize'
 require_relative 'page'
 
 class Spider
-  attr_reader :scrapper
+  attr_reader :scrapper, :scrapped_page
 
-  def crawl(initial_url)
-    2.times do
-      begin
-      raw_page = scrapper.get(initial_url)
-      page = Page.new(raw_page)
-      link = page.random_external_link
-      p link
-      crawl(link)
-      rescue => e
-        print e
-      end
+  def initialize
+    @scrapped_page = nil
+  end
+
+  def crawl(link='https://www.bbc.co.uk', itiration=0)
+    begin
+    p "crawling #{link}.."
+    @scrapped_page = scrapper.get(link)
+    p "done"
+    if itiration > 0
+      p itiration
+      new_link = Page.new(scrapped_page).random_external_link
+      crawl(new_link, itiration - 1)
+    end
+    rescue => e
+      print e
     end
   end
 
